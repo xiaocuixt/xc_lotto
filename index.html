@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+<script src="jquery.min.js"></script>
+<title>抽奖</title>
+<style>
+.main-content .xcLottery { width: 200px; height: 40px; border: #eee solid 1px; line-height: 40px; text-align:center; margin:50px auto; cursor:pointer; position: relative;}
+#xcShadow {position: absolute; left: 0; top:0;}
+
+</style>
+
+<script>
+$(function(){
+  var xcobj = null;
+  var canvas = document.getElementById('xcShadow');
+  var xcobj = canvas.getContext('2d');
+  xcobj.fillStyle='#666';
+  var isDown = false;
+  //用像素点大小的方形铺满div
+  for(x=0; x<=200; x++){
+    for(y=0; y<= 40; y++) {
+      xcobj.fillRect(x,y,1,1);
+    }
+  }
+  $(".xcLottery").mousedown(function() {
+    isDown = true;
+   })
+  //PC端效果
+  $(".xcLottery").mousemove(function(e){
+    var posX = $(this).offset().left, posY = $(this).offset().top;
+    if(isDown){
+      xcobj.clearRect(event.pageX - posX,event.pageY - posY, 5, 5);
+    }
+  });
+
+  //判断移动版的情况
+  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+     $(".xcLottery").bind('touchmove', function(e){
+       e.preventDefault();
+       var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+       var posX = $(this).offset().left, posY = $(this).offset().top;
+       xcobj.clearRect(touch.pageX - posX,touch.pageY - posY, 5, 5);
+    });
+    }
+});
+
+</script>
+</head>
+
+<body>
+  <div class="main-content">
+    <div class="xcLottery">
+      谢谢您
+      <canvas id="xcShadow" width="200" height="40">对不起您的设备不支持canvas!</canvas>
+    </div>
+  </div>
+</body>
+</html>
